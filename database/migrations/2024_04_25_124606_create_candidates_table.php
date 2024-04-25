@@ -18,8 +18,14 @@ class CreateCandidatesTable extends Migration
             $table->date('date_of_birth');
             $table->string('position');
             $table->text('language_knowledge');
-            $table->boolean('driving_license')->default(false);
+            $table->string('driving_license')->nullable();
+            $table->string('cv')->nullable();
             $table->boolean('own_transport')->default(false);
+            $table->string('is_working')->default(0);
+            // 0=not working
+            // 1=during recruitment
+            // 2=working
+            // 3=black list
             $table->timestamps();
         });
     }
