@@ -22,6 +22,8 @@ use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CandidatesResource\Pages;
+use IbrahimBougaoua\FilamentSortOrder\Actions\UpStepAction;
+use IbrahimBougaoua\FilamentSortOrder\Actions\DownStepAction;
 use App\Filament\Resources\CandidatesResource\RelationManagers;
 
 class CandidatesResource extends Resource
@@ -46,11 +48,12 @@ class CandidatesResource extends Resource
                 DatePicker::make('date_of_birth')->label('Date of Birth'),
                 TextInput::make('position')->label('Position'),
                 Textarea::make('language_knowledge')->label('Language Knowledge'),
-                FileUpload::make('driving_license')
+                Hidden::make('driving_license')
                     ->label('Driving License Image')
-                    ->image()
-                    ->downloadable()
-                    ->previewable(),
+                    // ->image()
+                    // ->downloadable()
+                    // ->previewable(false)
+                    ,
 
 
                 Checkbox::make('own_transport')->label('Own Transport'),
@@ -69,6 +72,10 @@ class CandidatesResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+        ->actions([
+            DownStepAction::make(),
+            UpStepAction::make(),
+        ])
             ->columns([
                 TextColumn::make('full_name', 'Name')
                     ->getStateUsing(function (Model $record) {
@@ -81,17 +88,21 @@ class CandidatesResource extends Resource
                     ->label('Age')
                     ->formatStateUsing(fn ($record) => Carbon::parse($record->date_of_birth)->age)
                     ->searchable(),
+                
 
 
             ])
+            ->defaultSort('sort_order', 'asc')
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
+            // ->actions([
+            //     Tables\Actions\ViewAction::make(),
+            //     Tables\Actions\EditAction::make(),
+            //     Tables\Actions\DeleteAction::make(),
+                
+                
+            // ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
