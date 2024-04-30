@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use Carbon\Carbon;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Get;
 use Filament\Tables;
 use Filament\Forms\Form;
 use App\Models\Candidates;
@@ -44,18 +46,24 @@ class CandidatesResource extends Resource
                     'male' => 'Male',
                     'female' => 'Female',
                 ])->label('Sex'),
-                DatePicker::make('date_of_birth')->label('Date of Birth'),
-                TextInput::make('position')->label('Position'),
-                Textarea::make('language_knowledge')->label('Language Knowledge'),
-                Hidden::make('driving_license')
-                    ->label('Driving License Image')
-                    // ->image()
-                    // ->downloadable()
-                    // ->previewable(false)
-                    ,
+                DatePicker::make('date_of_birth')
+                    ->label('Date of Birth'),
+                TextInput::make('position')
+                    ->label('Position'),
+                Textarea::make('language_knowledge')
+                    ->label('Language Knowledge'),
 
-
-                Checkbox::make('own_transport')->label('Own Transport'),
+                Grid::make('transport')
+                    ->schema([
+                        Checkbox::make('own_transport')
+                            ->label('Own Transport')
+                            ->live(),
+                        FileUpload::make('driving_license')
+                            ->image()
+                            ->hidden(fn(Get $get) => !$get('own_transport')),
+                    ])
+                ->columns(1)
+                ->columnSpan(1),
                 FileUpload::make('cv')->label('CV Upload')
                     ->acceptedFileTypes([
                         'application/pdf',
@@ -64,14 +72,15 @@ class CandidatesResource extends Resource
                     ])
                     ->downloadable(),
 
-                Hidden::make('is_working')->label('Is Working'),
+                Hidden::make('is_working')
+                    ->default(true)
+                    ->label('Is Working'),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-        
             ->columns([
                 TextColumn::make('full_name', 'Name')
                     ->getStateUsing(function (Model $record) {
@@ -82,9 +91,8 @@ class CandidatesResource extends Resource
                 TextColumn::make('phone_number')->label('Phone Number')->searchable(),
                 TextColumn::make('date_of_birth')
                     ->label('Age')
-                    ->formatStateUsing(fn ($record) => Carbon::parse($record->date_of_birth)->age)
+                    ->formatStateUsing(fn($record) => Carbon::parse($record->date_of_birth)->age)
                     ->searchable(),
-                
 
 
             ])
@@ -96,10 +104,10 @@ class CandidatesResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                
+
                 // DownStepAction::make(),
                 // UpStepAction::make(),
-                
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

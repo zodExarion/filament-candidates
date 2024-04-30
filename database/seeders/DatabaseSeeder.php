@@ -20,5 +20,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin1@admin.com',
         ]);
         Candidates::factory()->count(50)->create();
+
+        $this->call([LanguagesSeeder::class]);
     }
 }
