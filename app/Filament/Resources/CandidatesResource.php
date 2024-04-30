@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Models\Language;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
@@ -52,7 +53,9 @@ class CandidatesResource extends Resource
                     ->label('Position'),
                 Textarea::make('language_knowledge')
                     ->label('Language Knowledge'),
-
+                Select::make('languages')
+                    ->options(Language::all()->pluck('name', 'id'))
+                    ->multiple(),
                 Grid::make('transport')
                     ->schema([
                         Checkbox::make('own_transport')
@@ -62,8 +65,8 @@ class CandidatesResource extends Resource
                             ->image()
                             ->hidden(fn(Get $get) => !$get('own_transport')),
                     ])
-                ->columns(1)
-                ->columnSpan(1),
+                    ->columns(1)
+                    ->columnSpan(1),
                 FileUpload::make('cv')->label('CV Upload')
                     ->acceptedFileTypes([
                         'application/pdf',
@@ -93,6 +96,7 @@ class CandidatesResource extends Resource
                     ->label('Age')
                     ->formatStateUsing(fn($record) => Carbon::parse($record->date_of_birth)->age)
                     ->searchable(),
+                TextColumn::make('languages'),
 
 
             ])

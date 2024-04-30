@@ -10,6 +10,14 @@ class Candidates extends Model
 {
     use HasFactory;
     use SortOrder;
-    
+
     protected $guarded = [];
+
+    protected $casts = [
+        'languages' => 'array',
+    ];
+
+    public function languages(){
+        return $this->hasMany(Language::class);
+    }
 }
