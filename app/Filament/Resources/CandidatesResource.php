@@ -39,10 +39,17 @@ class CandidatesResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('email')->label('E-mail'),
-                TextInput::make('phone_number')->label('Phone Number'),
-                TextInput::make('first_name')->label('First Name'),
-                TextInput::make('last_name')->label('Last Name'),
+                TextInput::make('first_name')
+                    ->label('First Name'),
+                TextInput::make('last_name')
+                    ->label('Last Name'),
+                TextInput::make('email')
+                    ->label('E-mail'),
+                TextInput::make('telephone_number')
+                    ->tel(),
+                TextInput::make('phone_number')
+                    ->label('Phone Number')
+                    ->tel(),
                 Select::make('sex')->options([
                     'male' => 'Male',
                     'female' => 'Female',
@@ -67,7 +74,8 @@ class CandidatesResource extends Resource
                     ])
                     ->columns(1)
                     ->columnSpan(1),
-                FileUpload::make('cv')->label('CV Upload')
+                FileUpload::make('cv')
+                    ->label('CV Upload')
                     ->acceptedFileTypes([
                         'application/pdf',
                         'application/msword',
@@ -91,6 +99,7 @@ class CandidatesResource extends Resource
                     })
                     ->searchable(['first_name', 'last_name']),
                 TextColumn::make('email')->label('E-mail')->searchable(),
+                TextColumn::make('telephone_number')->searchable(),
                 TextColumn::make('phone_number')->label('Phone Number')->searchable(),
                 TextColumn::make('date_of_birth')
                     ->label('Age')
