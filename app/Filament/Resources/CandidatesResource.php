@@ -43,7 +43,6 @@ class CandidatesResource extends Resource
                 Select::make('sex')->options([
                     'male' => 'Male',
                     'female' => 'Female',
-                    'other' => 'Other',
                 ])->label('Sex'),
                 DatePicker::make('date_of_birth')->label('Date of Birth'),
                 TextInput::make('position')->label('Position'),
@@ -72,10 +71,7 @@ class CandidatesResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        ->actions([
-            DownStepAction::make(),
-            UpStepAction::make(),
-        ])
+        
             ->columns([
                 TextColumn::make('full_name', 'Name')
                     ->getStateUsing(function (Model $record) {
@@ -96,13 +92,15 @@ class CandidatesResource extends Resource
             ->filters([
                 //
             ])
-            // ->actions([
-            //     Tables\Actions\ViewAction::make(),
-            //     Tables\Actions\EditAction::make(),
-            //     Tables\Actions\DeleteAction::make(),
+            ->actions([
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
                 
+                // DownStepAction::make(),
+                // UpStepAction::make(),
                 
-            // ])
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
