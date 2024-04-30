@@ -33,7 +33,7 @@ class CandidatesResource extends Resource
 {
     protected static ?string $model = Candidates::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
     public static function form(Form $form): Form
     {
