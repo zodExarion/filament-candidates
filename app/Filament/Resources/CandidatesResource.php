@@ -6,6 +6,7 @@ use App\Models\Language;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -38,53 +39,7 @@ class CandidatesResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                TextInput::make('first_name')
-                    ->label('First Name'),
-                TextInput::make('last_name')
-                    ->label('Last Name'),
-                TextInput::make('email')
-                    ->label('E-mail'),
-                TextInput::make('telephone_number')
-                    ->tel(),
-                TextInput::make('phone_number')
-                    ->label('Phone Number')
-                    ->tel(),
-                Select::make('sex')->options([
-                    'male' => 'Male',
-                    'female' => 'Female',
-                ])->label('Sex'),
-                DatePicker::make('date_of_birth')
-                    ->label('Date of Birth'),
-                TextInput::make('position')
-                    ->label('Position'),
-                Select::make('languages')
-                    ->options(Language::all()->pluck('name', 'id'))
-                    ->multiple(),
-                Grid::make('transport')
-                    ->schema([
-                        Checkbox::make('own_transport')
-                            ->label('Own Transport')
-                            ->live(),
-                        FileUpload::make('driving_license')
-                            ->image()
-                            ->hidden(fn(Get $get) => !$get('own_transport')),
-                    ])
-                    ->columns(1)
-                    ->columnSpan(1),
-                FileUpload::make('cv')
-                    ->label('CV Upload')
-                    ->acceptedFileTypes([
-                        'application/pdf',
-                        'application/msword',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                    ])
-                    ->downloadable(),
-
-                Hidden::make('is_working')
-                    ->default(true)
-                    ->label('Is Working'),
-            ]);
+            ->schema([]);
     }
 
     public static function table(Table $table): Table
@@ -96,29 +51,44 @@ class CandidatesResource extends Resource
                         return $record->first_name . ' ' . $record->last_name;
                     })
                     ->searchable(['first_name', 'last_name']),
-                TextColumn::make('email')->label('E-mail')->searchable(),
-                TextColumn::make('telephone_number')->searchable(),
-                TextColumn::make('phone_number')->label('Phone Number')->searchable(),
+                TextColumn::make('email')->label('E-mail')
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('telephone_number')
+                    ->searchable()
+                    ->toggleable(),
+                TextColumn::make('phone_number')
+                    ->label('Phone Number')
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('date_of_birth')
+                    ->toggleable()
                     ->label('Age')
                     ->formatStateUsing(fn($record) => Carbon::parse($record->date_of_birth)->age)
                     ->searchable(),
-                TextColumn::make('languages'),
-
-
+                TextColumn::make('languages_names')
+                    ->label('Languages')
+                    ->toggleable()
+                    ->searchable(),
+                TextColumn::make('projects_titles')
+                    ->label('Projects')
+                    ->toggleable()
+                    ->searchable(),
             ])
             ->defaultSort('sort_order', 'asc')
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->form(self::getFormSchema())
+                    ->slideOver()
+                    ->modalWidth('md'),
+                Tables\Actions\EditAction::make()
+                    ->form(self::getFormSchema())
+                    ->slideOver()
+                    ->modalWidth('md'),
                 Tables\Actions\DeleteAction::make(),
-
-                // DownStepAction::make(),
-                // UpStepAction::make(),
-
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -138,8 +108,66 @@ class CandidatesResource extends Resource
     {
         return [
             'index' => Pages\ListCandidates::route('/'),
-            'create' => Pages\CreateCandidates::route('/create'),
-            'edit' => Pages\EditCandidates::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getFormSchema()
+    {
+        return [
+            TextInput::make('first_name')
+                ->label('First Name'),
+            TextInput::make('last_name')
+                ->label('Last Name'),
+            TextInput::make('email')
+                ->label('E-mail'),
+            TextInput::make('telephone_number')
+                ->tel(),
+            TextInput::make('phone_number')
+                ->label('Phone Number')
+                ->tel(),
+            Select::make('sex')->options([
+                'male' => 'Male',
+                'female' => 'Female',
+            ])->label('Sex'),
+            DatePicker::make('date_of_birth')
+                ->label('Date of Birth'),
+            TextInput::make('position')
+                ->label('Position'),
+            Select::make('languages')
+                ->options(Language::all()->pluck('name', 'id'))
+                ->multiple(),
+            Grid::make('transport')
+                ->schema([
+                    Checkbox::make('own_transport')
+                        ->label('Own Transport')
+                        ->live(),
+                    FileUpload::make('driving_license')
+                        ->image()
+                        ->hidden(fn(Get $get) => !$get('own_transport')),
+                ])
+                ->columns(1)
+                ->columnSpan(1),
+            FileUpload::make('cv')
+                ->label('CV Upload')
+                ->acceptedFileTypes([
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                ])
+                ->downloadable(),
+            Textarea::make('notes'),
+            Repeater::make('projects')
+                ->schema([
+                    TextInput::make('title'),
+                    Textarea::make('description'),
+                    TextInput::make('url')->url(),
+                    DatePicker::make('start_date'),
+                    DatePicker::make('end_date'),
+                ])
+                ->defaultItems(0),
+            Hidden::make('is_working')
+                ->default(true)
+                ->label('Is Working'),
         ];
     }
 }

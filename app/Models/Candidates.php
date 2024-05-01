@@ -15,9 +15,33 @@ class Candidates extends Model
 
     protected $casts = [
         'languages' => 'array',
+        'projects' => 'array',
     ];
 
-    public function languages(){
+    protected $appends = [
+        'languages_names',
+        'projects_titles'
+    ];
+
+    public function languages()
+    {
         return $this->hasMany(Language::class);
+    }
+
+    public function getLanguagesNamesAttribute()
+    {
+        if ($this->languages) {
+            return implode(', ', Language::whereIn('id', $this->languages)->pluck('name')->toArray());
+        }
+        return "";
+    }
+
+    public function getProjectsTitlesAttribute()
+    {
+        if ($this->projects) {
+            return implode(', ', array_column($this->projects, 'title'));
+        }
+
+        return "";
     }
 }

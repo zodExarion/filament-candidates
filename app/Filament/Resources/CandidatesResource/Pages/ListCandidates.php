@@ -13,7 +13,10 @@ class ListCandidates extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->form(CandidatesResource::getFormSchema())
+                ->modalWidth('md')
+                ->slideOver(),
         ];
     }
 }
