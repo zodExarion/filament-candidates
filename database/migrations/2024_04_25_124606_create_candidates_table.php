@@ -14,10 +14,10 @@ class CreateCandidatesTable extends Migration
             $table->string('phone_number');
             $table->string('first_name');
             $table->string('last_name');
-            $table->enum('sex', ['male', 'female', 'other']);
+            $table->enum('sex', ['male', 'female']);
             $table->date('date_of_birth');
             $table->string('position');
-            $table->text('language_knowledge');
+            $table->text('languages');
             $table->string('driving_license')->nullable();
             $table->string('cv')->nullable();
             $table->boolean('own_transport')->default(false);

@@ -23,10 +23,10 @@ class CandidatesFactory extends Factory
             'phone_number' => $this->faker->phoneNumber,
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
-            'sex' => $this->faker->randomElement(['male', 'female', 'other']),
+            'sex' => $this->faker->randomElement(['male', 'female']),
             'date_of_birth' => $this->faker->date(),
             'position' => $this->faker->jobTitle,
-            'language_knowledge' => $this->faker->text,
+            'languages' => $this->faker->randomElement([2, 1]),
             'driving_license' => null, // For now, as it's nullable
             'cv' => null, // For now, as it's nullable
             'own_transport' => $this->faker->boolean,

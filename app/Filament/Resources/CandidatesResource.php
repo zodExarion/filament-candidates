@@ -58,8 +58,6 @@ class CandidatesResource extends Resource
                     ->label('Date of Birth'),
                 TextInput::make('position')
                     ->label('Position'),
-                Textarea::make('language_knowledge')
-                    ->label('Language Knowledge'),
                 Select::make('languages')
                     ->options(Language::all()->pluck('name', 'id'))
                     ->multiple(),
