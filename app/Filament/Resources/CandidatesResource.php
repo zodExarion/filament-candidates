@@ -68,12 +68,10 @@ class CandidatesResource extends Resource
                     ->searchable(),
                 TextColumn::make('languages_names')
                     ->label('Languages')
-                    ->toggleable()
-                    ->searchable(),
+                    ->toggleable(),
                 TextColumn::make('projects_titles')
                     ->label('Projects')
-                    ->toggleable()
-                    ->searchable(),
+                    ->toggleable(),
             ])
             ->defaultSort('sort_order', 'asc')
             ->filters([
