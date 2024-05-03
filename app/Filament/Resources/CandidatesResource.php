@@ -10,7 +10,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Tables;
 use Filament\Forms\Form;
-use App\Models\Candidates;
+use App\Models\Candidate;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Hidden;
@@ -31,10 +31,12 @@ use App\Filament\Resources\CandidatesResource\Pages;
 use IbrahimBougaoua\FilamentSortOrder\Actions\UpStepAction;
 use IbrahimBougaoua\FilamentSortOrder\Actions\DownStepAction;
 use App\Filament\Resources\CandidatesResource\RelationManagers;
+use App\Filament\Resources\CandidatesResource\RelationManagers\NotesRelationManager;
+use App\Filament\Resources\CandidatesResource\RelationManagers\ProjectsRelationManager;
 
 class CandidatesResource extends Resource
 {
-    protected static ?string $model = Candidates::class;
+    protected static ?string $model = Candidate::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
@@ -50,7 +52,8 @@ class CandidatesResource extends Resource
         Section::make()
             ->schema(
                 self::getFormSchema()
-            )
+            ),
+        
         ]);
     }
 
@@ -111,7 +114,8 @@ class CandidatesResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            NotesRelationManager::class,
+            ProjectsRelationManager::class
         ];
     }
 
@@ -167,16 +171,6 @@ class CandidatesResource extends Resource
                     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                 ])
                 ->downloadable(),
-            Textarea::make('notes'),
-            Repeater::make('projects')
-                ->schema([
-                    TextInput::make('title'),
-                    Textarea::make('description'),
-                    TextInput::make('url')->url(),
-                    DatePicker::make('start_date'),
-                    DatePicker::make('end_date'),
-                ])
-                ->defaultItems(0),
             Hidden::make('is_working')
                 ->default(true)
                 ->label('Is Working'),

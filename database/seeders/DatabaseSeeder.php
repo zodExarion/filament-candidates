@@ -5,7 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\Candidates;
+use App\Models\Candidate;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,6 +21,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin1@admin.com',
         ]);
 
-        Candidates::factory()->count(50)->create();
+        Candidate::factory()->count(50)->create();
     }
 }

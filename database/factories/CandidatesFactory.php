@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Candidates;
+use App\Models\Candidate;
 use App\Models\Language;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

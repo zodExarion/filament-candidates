@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use IbrahimBougaoua\FilamentSortOrder\Traits\SortOrder;
 
-class Candidates extends Model
+class Candidate extends Model
 {
     use HasFactory;
     use SortOrder;
@@ -27,6 +28,17 @@ class Candidates extends Model
     {
         return $this->hasMany(Language::class);
     }
+
+    public function notes(): HasMany
+    {
+        return $this->hasMany(Note::class);
+    }
+
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class);
+    }
+    
 
     public function getLanguagesNamesAttribute()
     {
