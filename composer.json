@@ -6,15 +6,18 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "awcodes/overlook": "^2.2",
         "filament/filament": "3.2",
         "filament/forms": "3.2",
         "filament/tables": "3.2",
         "filament/widgets": "3.2",
         "guzzlehttp/guzzle": "^7.2",
+        "ibrahimbougaoua/filament-rating-star": "^1.0",
         "ibrahimbougaoua/filament-sort-order": "^1.1",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
-        "laravel/tinker": "^2.8"
+        "laravel/tinker": "^2.8",
+        "saade/filament-fullcalendar": "^3.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
