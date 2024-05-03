@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use IbrahimBougaoua\FilamentRatingStar\Actions\RatingStar;
+use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -39,7 +41,17 @@ class CandidatesResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([]);
+            ->schema([
+        // Section::make()
+        //     ->schema([
+        //         RatingStar::make('rating')
+        //         ->label('Rating')
+        //     ]),
+        Section::make()
+            ->schema(
+                self::getFormSchema()
+            )
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -54,9 +66,9 @@ class CandidatesResource extends Resource
                 TextColumn::make('email')->label('E-mail')
                     ->searchable()
                     ->toggleable(),
-                TextColumn::make('telephone_number')
-                    ->searchable()
-                    ->toggleable(),
+                // TextColumn::make('telephone_number')
+                //     ->searchable()
+                //     ->toggleable(),
                 TextColumn::make('phone_number')
                     ->label('Phone Number')
                     ->searchable()
@@ -69,9 +81,9 @@ class CandidatesResource extends Resource
                 TextColumn::make('languages_names')
                     ->label('Languages')
                     ->toggleable(),
-                TextColumn::make('projects_titles')
-                    ->label('Projects')
-                    ->toggleable(),
+                // TextColumn::make('projects_titles')
+                //     ->label('Projects')
+                //     ->toggleable(),
             ])
             ->defaultSort('sort_order', 'asc')
             ->filters([
@@ -83,9 +95,10 @@ class CandidatesResource extends Resource
                     ->slideOver()
                     ->modalWidth('md'),
                 Tables\Actions\EditAction::make()
-                    ->form(self::getFormSchema())
-                    ->slideOver()
-                    ->modalWidth('md'),
+                //     ->form(self::getFormSchema())
+                //     ->slideOver()
+                //     ->modalWidth('md')
+                ,
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
@@ -106,6 +119,7 @@ class CandidatesResource extends Resource
     {
         return [
             'index' => Pages\ListCandidates::route('/'),
+            'edit' => Pages\EditCandidates::route('/{record}/edit'),
         ];
     }
 
